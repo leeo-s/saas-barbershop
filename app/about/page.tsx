@@ -1,7 +1,8 @@
 import React from "react"
+import { Button } from "../_components/ui/button"
 
 const About = () => {
-  return <div className="mb-5 bg-red-50 text-red-500">about page</div>
+  return <Button>Teste</Button>
 }
 
 export default About
