@@ -1,0 +1,4 @@
+{
+  "_comentario": "se o arquivo for .ts ou .tsx ele vai rodar o eslint nele e o prettier, corrigindo erros e ajustando o código",
+  "*.ts?(x)": ["eslint --fix", "prettier --write"]
+}

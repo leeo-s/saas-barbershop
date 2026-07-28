@@ -1,10 +1,7 @@
-"use client";
-
-import { useState } from "react";
+"use client"
 
 const Home = () => {
-  const [list, setList] = useState([]);
-  return <h1>home page</h1>;
-};
+  return <h1>home page</h1>
+}
 
-export default Home;
+export default Home
