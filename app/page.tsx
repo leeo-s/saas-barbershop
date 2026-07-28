@@ -8,6 +8,18 @@ import BarbershopItem from "./_components/barbershop-item"
 import Footer from "./_components/footer"
 import { quickSearchOptions } from "./_constants/QuickSearch"
 import BookingItem from "./_components/booking-item"
+import { BookingItem as BookingItemModel } from "./_models/booking"
+
+const bookingItem: BookingItemModel = {
+  status: "Confirmado",
+  service: "Corte de Cabelo",
+  barbershopName: "FSW Barber",
+  barbershopImageUrl:
+    "https://utfs.io/f/e995db6d-df96-4658-99f5-11132fd931e1-17j.png",
+  bookingMonth: "Julho",
+  bookingDay: "28",
+  bookingHour: "16:00",
+}
 
 const Home = async () => {
   // chamada do banco de dados
@@ -61,7 +73,7 @@ const Home = async () => {
         </div>
 
         {/* AGENDAMENTO */}
-        <BookingItem />
+        <BookingItem bookingItem={bookingItem} section="Agendamentos" />
 
         {/* SEÇÃO RECOMENDADOS */}
         <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
