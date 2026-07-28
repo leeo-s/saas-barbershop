@@ -8,11 +8,16 @@ import { Badge } from "./_components/ui/badge"
 import { Avatar, AvatarImage } from "./_components/ui/avatar"
 import prisma from "@/config/prisma"
 import BarbershopItem from "./_components/barbershop-item"
+import Footer from "./_components/footer"
 
 const Home = async () => {
   // chamada do banco de dados
   const barbershops = await prisma.barbershop.findMany({})
-  console.log(barbershops)
+  const popularBarbershops = await prisma.barbershop.findMany({
+    orderBy: {
+      name: "desc",
+    },
+  })
 
   return (
     <div>
@@ -28,6 +33,39 @@ const Home = async () => {
 
           <Button className="rounded-lg bg-purple-600">
             <SearchIcon />
+          </Button>
+        </div>
+
+        {/* BUSCA RÁPIDA */}
+        <div className="mt-6 flex gap-3 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
+          <Button className="gap-2" variant={"secondary"}>
+            <Image src="/cabelo.svg" width={16} height={16} alt="Cabelo" />
+            Cabelo
+          </Button>
+
+          <Button className="gap-2" variant={"secondary"}>
+            <Image src="/barba.svg" width={16} height={16} alt="Cabelo" />
+            Barba
+          </Button>
+
+          <Button className="gap-2" variant={"secondary"}>
+            <Image src="/acabamento.svg" width={16} height={16} alt="Cabelo" />
+            Acabamento
+          </Button>
+
+          <Button className="gap-2" variant={"secondary"}>
+            <Image src="/sobrancelha.svg" width={16} height={16} alt="Cabelo" />
+            Sobrancelha
+          </Button>
+
+          <Button className="gap-2" variant={"secondary"}>
+            <Image src="/massagem.svg" width={16} height={16} alt="Cabelo" />
+            Massagem
+          </Button>
+
+          <Button className="gap-2" variant={"secondary"}>
+            <Image src="/hidratacao.svg" width={16} height={16} alt="Cabelo" />
+            Hidratação
           </Button>
         </div>
 
@@ -68,6 +106,7 @@ const Home = async () => {
           </CardContent>
         </Card>
 
+        {/* SEÇÃO RECOMENDADOS */}
         <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
           Recomendados
         </h2>
@@ -77,7 +116,22 @@ const Home = async () => {
             <BarbershopItem key={barbershop.id} barbershop={barbershop} />
           ))}
         </div>
+
+        {/* SEÇÃO POPULARES */}
+        <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
+          Recomendados
+        </h2>
+        <div className="flex gap-4 overflow-auto [&::-webkit-scrollbar]:hidden">
+          {/* esse [&::-webkit-scrollbar]:hidden vai esconder a barra de scroll que ficaria abaixo dos cards*/}
+          {popularBarbershops.map((barbershop) => (
+            <BarbershopItem key={barbershop.id} barbershop={barbershop} />
+          ))}
+        </div>
       </div>
+
+      <footer>
+        <Footer />
+      </footer>
     </div>
   )
 }
