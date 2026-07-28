@@ -4,6 +4,7 @@ import Image from "next/image"
 import { Button } from "./ui/button"
 import { Badge } from "./ui/badge"
 import { StarIcon } from "lucide-react"
+import Link from "next/link"
 //import { Barbershop } from "../_models/barbershop" poderia fazer assim também, criando minha própria interface
 
 interface BarbershopItemProps {
@@ -38,8 +39,8 @@ const BarbershopItem = ({ barbershop }: BarbershopItemProps) => {
           {/* truncate vai aplicar esse 3 ao mesmo tempo: overflow-hidden text-ellipsis text-nowrap que vai dar o efeito de 3 pontos caso o nome
           fique muito grande */}
           <p className="truncate text-sm text-gray-400">{barbershop.address}</p>
-          <Button variant="secondary" className="mt-3 w-full">
-            Reservar
+          <Button variant="secondary" className="mt-3 w-full" asChild>
+            <Link href={`/barbershops/${barbershop.id}`}>Reservar</Link>
           </Button>
         </div>
       </CardContent>
