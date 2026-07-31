@@ -1,13 +1,12 @@
-import { SearchIcon } from "lucide-react"
 import Header from "./_components/header"
 import { Button } from "./_components/ui/button"
-import { Input } from "./_components/ui/input"
 import Image from "next/image"
 import prisma from "@/config/prisma"
 import BarbershopItem from "./_components/barbershop-item"
 import { quickSearchOptions } from "./_constants/QuickSearch"
 import BookingItem from "./_components/booking-item"
 import { BookingItem as BookingItemModel } from "./_models/booking"
+import Search from "./_components/search"
 
 const bookingItem: BookingItemModel = {
   status: "Confirmado",
@@ -38,12 +37,8 @@ const Home = async () => {
         <p>28/07/2026</p>
 
         {/* BUSCAR */}
-        <div className="mt-2 flex items-center gap-2">
-          <Input placeholder="Buscar" />
-
-          <Button className="rounded-lg bg-purple-600">
-            <SearchIcon />
-          </Button>
+        <div className="mt-6">
+          <Search />
         </div>
 
         {/* BUSCA RÁPIDA */}
