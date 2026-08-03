@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "../_lib/auth"
 import { notFound } from "next/navigation"
 import BookingItem from "../_components/booking-item"
+import { Card, CardContent } from "../_components/ui/card"
 
 const Bookings = async () => {
   const session = await getServerSession(authOptions)
@@ -63,6 +64,15 @@ const Bookings = async () => {
         </h2>
 
         {/* CARD DE BOOKINGS */}
+        {confirmedBookings.length == 0 && (
+          <div>
+            <Card className="align-center flex items-center">
+              <CardContent className="pt-2 text-center">
+                <h2>Sem horários agendados</h2>
+              </CardContent>
+            </Card>
+          </div>
+        )}
         {confirmedBookings.map((booking) => (
           <BookingItem bookingItem={booking} key={booking.id} />
         ))}
@@ -71,6 +81,15 @@ const Bookings = async () => {
           Finalizados
         </h2>
 
+        {closedBookings.length == 0 && (
+          <div>
+            <Card className="align-center flex items-center">
+              <CardContent className="pt-2 text-center">
+                <h2>Sem horários finalizados</h2>
+              </CardContent>
+            </Card>
+          </div>
+        )}
         {/* CARD DE BOOKINGS */}
         {closedBookings.map((booking) => (
           <BookingItem bookingItem={booking} key={booking.id} />
