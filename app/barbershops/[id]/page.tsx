@@ -93,7 +93,7 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
             <ServiceItem
               key={service.id}
               barbershop={JSON.parse(JSON.stringify(barbershop))}
-              service={{ ...service, price: Number(service.price) }}
+              service={service}
             />
           ))}
         </div>

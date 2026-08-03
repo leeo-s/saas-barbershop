@@ -32,6 +32,7 @@ import {
 import { deleteBooking } from "../_actions/delete-booking"
 import { toast } from "sonner"
 import { useState } from "react"
+import BookingSummary from "./booking-summary"
 
 interface BookingItemProps {
   bookingItem: Prisma.BookingGetPayload<{
@@ -141,7 +142,16 @@ const BookingItem = ({ bookingItem }: BookingItemProps) => {
               {isConfirmed ? "Confirmado" : "Finalizado"}
             </Badge>
 
-            <Card className="mb-6 mt-3">
+            <div className="mb-6 mt-3">
+              <BookingSummary
+                barbershop={barbershop}
+                service={bookingItem.service}
+                selectedDate={bookingItem.date}
+                showName={false}
+              />
+            </div>
+
+            {/* <Card className="mb-6 mt-3">
               <CardContent className="space-y-3 p-3">
                 <div className="flex items-center justify-between">
                   <h2 className="font-bold">{bookingItem.service.name}</h2>
@@ -169,12 +179,12 @@ const BookingItem = ({ bookingItem }: BookingItemProps) => {
                   </p>
                 </div>
 
-                {/* <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between">
                   <h2 className="text-sm text-gray-400">Barbearia</h2>
                   <p className="text-sm">{barbershop.name}</p>
-                </div> */}
+                </div>
               </CardContent>
-            </Card>
+            </Card> */}
 
             <div className="space-y-3">
               {barbershop.phones.map((phone, index) => (
