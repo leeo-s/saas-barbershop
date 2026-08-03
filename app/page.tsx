@@ -5,22 +5,14 @@ import prisma from "@/config/prisma"
 import BarbershopItem from "./_components/barbershop-item"
 import { quickSearchOptions } from "./_constants/QuickSearch"
 import BookingItem from "./_components/booking-item"
-import { BookingItem as BookingItemModel } from "./_models/booking"
 import Search from "./_components/search"
 import Link from "next/link"
-
-const bookingItem: BookingItemModel = {
-  status: "Confirmado",
-  service: "Corte de Cabelo",
-  barbershopName: "FSW Barber",
-  barbershopImageUrl:
-    "https://utfs.io/f/e995db6d-df96-4658-99f5-11132fd931e1-17j.png",
-  bookingMonth: "Julho",
-  bookingDay: "28",
-  bookingHour: "16:00",
-}
+import { getServerSession } from "next-auth"
+import { authOptions } from "./_lib/auth"
 
 const Home = async () => {
+  const session = await getServerSession(authOptions)
+
   // chamada do banco de dados
   const barbershops = await prisma.barbershop.findMany({})
   const popularBarbershops = await prisma.barbershop.findMany({
@@ -28,6 +20,28 @@ const Home = async () => {
       name: "desc",
     },
   })
+
+  const confirmedBookings = session?.user
+    ? await prisma.booking.findMany({
+        where: {
+          userId: session?.user.id,
+          date: {
+            gte: new Date(),
+          },
+        },
+        include: {
+          service: {
+            include: {
+              barbershop: true,
+            },
+          },
+        },
+        orderBy: {
+          date: "asc",
+        },
+        take: 3,
+      })
+    : []
 
   return (
     <div>
@@ -74,8 +88,16 @@ const Home = async () => {
           />
         </div>
 
+        <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
+          Agendamentos
+        </h2>
+
         {/* AGENDAMENTO */}
-        <BookingItem bookingItem={bookingItem} section="Agendamentos" />
+        <div className="flex gap-3 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+          {confirmedBookings.map((booking) => (
+            <BookingItem bookingItem={booking} key={booking.id} />
+          ))}
+        </div>
 
         {/* SEÇÃO RECOMENDADOS */}
         <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
