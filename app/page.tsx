@@ -9,6 +9,8 @@ import Search from "./_components/search"
 import Link from "next/link"
 import { getServerSession } from "next-auth"
 import { authOptions } from "./_lib/auth"
+import { format } from "date-fns"
+import { ptBR } from "date-fns/locale"
 
 const Home = async () => {
   const session = await getServerSession(authOptions)
@@ -48,8 +50,18 @@ const Home = async () => {
       {/* header */}
       <Header />
       <div className="p-5">
-        <h2 className="text-xl font-bold">Olá, Leonardo!</h2>
-        <p>28/07/2026</p>
+        <h2 className="text-xl font-bold">
+          Olá, {session?.user ? session.user.name : "seja bem vindo"}!
+        </h2>
+        <p>
+          <span className="capitalize">
+            {format(new Date(), "EEEE, dd ", { locale: ptBR })}
+          </span>
+          de
+          <span className="capitalize">
+            {format(new Date(), " MMMM", { locale: ptBR })}
+          </span>
+        </p>
 
         {/* BUSCAR */}
         <div className="mt-6">
@@ -88,16 +100,20 @@ const Home = async () => {
           />
         </div>
 
-        <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
-          Agendamentos
-        </h2>
+        {/* AGENDAMENTOS */}
+        {confirmedBookings.length > 0 && (
+          <>
+            <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
+              Agendamentos
+            </h2>
 
-        {/* AGENDAMENTO */}
-        <div className="flex gap-3 overflow-x-auto [&::-webkit-scrollbar]:hidden">
-          {confirmedBookings.map((booking) => (
-            <BookingItem bookingItem={booking} key={booking.id} />
-          ))}
-        </div>
+            <div className="flex gap-3 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+              {confirmedBookings.map((booking) => (
+                <BookingItem bookingItem={booking} key={booking.id} />
+              ))}
+            </div>
+          </>
+        )}
 
         {/* SEÇÃO RECOMENDADOS */}
         <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
