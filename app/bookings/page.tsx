@@ -1,10 +1,11 @@
-import prisma from "@/config/prisma"
 import Header from "../_components/header"
 import { getServerSession } from "next-auth"
 import { authOptions } from "../_lib/auth"
 import { notFound } from "next/navigation"
 import BookingItem from "../_components/booking-item"
 import { Card, CardContent } from "../_components/ui/card"
+import { getConfirmedBookings } from "../_data/get-confirmed-bookings"
+import { getClosedBookings } from "../_data/get-closed-bookings"
 
 const Bookings = async () => {
   const session = await getServerSession(authOptions)
@@ -14,43 +15,8 @@ const Bookings = async () => {
   }
 
   const [confirmedBookings, closedBookings] = await Promise.all([
-    prisma.booking.findMany({
-      where: {
-        userId: session.user.id,
-        date: {
-          gte: new Date(),
-        },
-      },
-      include: {
-        service: {
-          include: {
-            barbershop: true,
-          },
-        },
-      },
-      orderBy: {
-        date: "asc",
-      },
-    }),
-
-    prisma.booking.findMany({
-      where: {
-        userId: session.user.id,
-        date: {
-          lt: new Date(),
-        },
-      },
-      include: {
-        service: {
-          include: {
-            barbershop: true,
-          },
-        },
-      },
-      orderBy: {
-        date: "desc",
-      },
-    }),
+    getConfirmedBookings(),
+    getClosedBookings(),
   ])
 
   return (
