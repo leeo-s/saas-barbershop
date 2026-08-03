@@ -22,6 +22,7 @@ import { getBookings } from "../_actions/get-booking"
 import { Dialog, DialogContent } from "./ui/dialog"
 import SignInDialog from "./sign-in-dialog"
 import BookingSummary from "./booking-summary"
+import { useRouter } from "next/navigation"
 
 interface ServiceItemProps {
   service: BarbershopService
@@ -93,6 +94,7 @@ const getTimeList = ({ bookings, selectedDay }: GetTimeListProps) => {
 }
 
 const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
+  const router = useRouter()
   const { data } = useSession()
   const [signInDialogIsOpen, setSignInDialogIsOpen] = useState(false)
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(undefined)
@@ -159,7 +161,12 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
 
       handleBookingSheetOpenChange()
 
-      toast.success("Reserva confirmada com sucesso!")
+      toast.success("Reserva confirmada com sucesso!", {
+        action: {
+          label: "Ver agendamentos",
+          onClick: () => router.push("/bookings"),
+        },
+      })
     } catch (error) {
       console.error(error)
       toast.error("Erro ao confirmar a reserva!")
