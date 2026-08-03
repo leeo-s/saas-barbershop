@@ -1,6 +1,6 @@
 import "dotenv/config"
 
-import { prisma } from "@/config/prisma"
+import prisma from "@/config/prisma"
 
 async function seedDatabase() {
   try {
