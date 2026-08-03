@@ -65,13 +65,11 @@ const Bookings = async () => {
 
         {/* CARD DE BOOKINGS */}
         {confirmedBookings.length == 0 && (
-          <div>
-            <Card className="align-center flex items-center">
-              <CardContent className="pt-2 text-center">
-                <h2>Sem horários agendados</h2>
-              </CardContent>
-            </Card>
-          </div>
+          <Card className="flex items-center justify-center">
+            <CardContent className="pt-6 text-center">
+              <h2>Sem horários agendados</h2>
+            </CardContent>
+          </Card>
         )}
         {confirmedBookings.map((booking) => (
           <BookingItem bookingItem={booking} key={booking.id} />
@@ -82,13 +80,11 @@ const Bookings = async () => {
         </h2>
 
         {closedBookings.length == 0 && (
-          <div>
-            <Card className="align-center flex items-center">
-              <CardContent className="pt-2 text-center">
-                <h2>Sem horários finalizados</h2>
-              </CardContent>
-            </Card>
-          </div>
+          <Card className="flex items-center justify-center">
+            <CardContent className="pt-6 text-center">
+              <h2>Sem horários finalizados</h2>
+            </CardContent>
+          </Card>
         )}
         {/* CARD DE BOOKINGS */}
         {closedBookings.map((booking) => (
