@@ -180,10 +180,17 @@ exports.Prisma.BarbershopServiceScalarFieldEnum = {
   barbershopId: 'barbershopId'
 };
 
+exports.Prisma.BarbershopEmployeesScalarFieldEnum = {
+  id: 'id',
+  barbershopId: 'barbershopId',
+  userId: 'userId'
+};
+
 exports.Prisma.BookingScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   serviceId: 'serviceId',
+  employeeId: 'employeeId',
   date: 'date',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -212,6 +219,7 @@ exports.Prisma.ModelName = {
   VerificationToken: 'VerificationToken',
   Barbershop: 'Barbershop',
   BarbershopService: 'BarbershopService',
+  BarbershopEmployees: 'BarbershopEmployees',
   Booking: 'Booking'
 };
 

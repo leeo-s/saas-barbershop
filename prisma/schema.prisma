@@ -14,14 +14,15 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String                @id @default(cuid())
   name          String?
-  email         String    @unique
+  email         String                @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
   bookings      Booking[]
+  barbershop    BarbershopEmployees[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -67,15 +68,16 @@ model VerificationToken {
 }
 
 model Barbershop {
-  id          String              @id @default(cuid())
+  id          String                @id @default(cuid())
   name        String
   address     String
   phones      String[]
   description String
   imageUrl    String
-  createdAt   DateTime            @default(now())
-  updatedAt   DateTime            @updatedAt
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
   services    BarbershopService[]
+  employees   BarbershopEmployees[]
 }
 
 model BarbershopService {
@@ -89,13 +91,24 @@ model BarbershopService {
   bookings     Booking[]
 }
 
+model BarbershopEmployees {
+  id           String     @id @default(cuid())
+  barbershopId String
+  barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
+  userId       String
+  user         User       @relation(fields: [userId], references: [id])
+  bookings     Booking[]
+}
+
 model Booking {
-  id        String            @id @default(cuid())
-  userId    String
-  user      User              @relation(fields: [userId], references: [id])
-  serviceId String
-  service   BarbershopService @relation(fields: [serviceId], references: [id])
-  date      DateTime
-  createdAt DateTime          @default(now())
-  updatedAt DateTime          @updatedAt
+  id         String              @id @default(cuid())
+  userId     String
+  user       User                @relation(fields: [userId], references: [id])
+  serviceId  String
+  service    BarbershopService   @relation(fields: [serviceId], references: [id])
+  employeeId String
+  employee   BarbershopEmployees @relation(fields: [employeeId], references: [id])
+  date       DateTime
+  createdAt  DateTime            @default(now())
+  updatedAt  DateTime            @updatedAt
 }

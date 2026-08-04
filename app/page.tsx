@@ -12,8 +12,15 @@ import { authOptions } from "./_lib/auth"
 import { format } from "date-fns"
 import { ptBR } from "date-fns/locale"
 import { getConfirmedBookings } from "./_data/get-confirmed-bookings"
+import HomeSigninTrigger from "./_components/home-signin-trigger"
 
-const Home = async () => {
+interface HomeProps {
+  searchParams: {
+    showSignIn?: boolean
+  }
+}
+
+const Home = async ({ searchParams }: HomeProps) => {
   const session = await getServerSession(authOptions)
 
   // chamada do banco de dados
@@ -28,6 +35,8 @@ const Home = async () => {
 
   return (
     <div>
+      <HomeSigninTrigger showParams={{ showSignIn: searchParams.showSignIn }} />
+
       {/* header */}
       <Header />
       <div className="p-5">
