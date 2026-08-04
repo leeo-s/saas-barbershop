@@ -4,7 +4,7 @@ import Search from "../_components/search"
 import { Card } from "../_components/ui/card"
 
 // app/bookings/loading.tsx
-const Loading = () => {
+const LoadingBarbershops = () => {
   return (
     <>
       <Header />
@@ -27,4 +27,4 @@ const Loading = () => {
   )
 }
 
-export default Loading
+export default LoadingBarbershops

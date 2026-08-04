@@ -1,7 +1,7 @@
 import { Spinner } from "@/app/_components/ui/spinner"
 
 // app/bookings/loading.tsx
-const Loading = () => {
+const LoadingBarbershopsDetails = () => {
   return (
     <div className="mt-[50%] flex justify-center">
       <Spinner className="size-8" />
@@ -9,4 +9,4 @@ const Loading = () => {
   )
 }
 
-export default Loading
+export default LoadingBarbershopsDetails

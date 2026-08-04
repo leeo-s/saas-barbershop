@@ -1,7 +1,7 @@
 import { Spinner } from "./_components/ui/spinner"
 import Header from "./_components/header"
 
-const Loading = () => {
+const LoadingHome = () => {
   return (
     <div>
       {/* header */}
@@ -13,4 +13,4 @@ const Loading = () => {
   )
 }
 
-export default Loading
+export default LoadingHome

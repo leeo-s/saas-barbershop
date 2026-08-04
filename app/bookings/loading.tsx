@@ -3,7 +3,7 @@ import { Card, CardContent } from "../_components/ui/card"
 import { Spinner } from "../_components/ui/spinner"
 
 // app/bookings/loading.tsx
-const Loading = () => {
+const LoadingBookings = () => {
   return (
     <>
       <Header />
@@ -34,4 +34,4 @@ const Loading = () => {
   )
 }
 
-export default Loading
+export default LoadingBookings
