@@ -1,6 +1,11 @@
 "use client"
 
-import { Barbershop, BarbershopService, Booking } from "@/generated/prisma"
+import {
+  Barbershop,
+  BarbershopService,
+  Booking,
+  Prisma,
+} from "@/generated/prisma"
 import Image from "next/image"
 import { Button } from "./ui/button"
 import { Card, CardContent } from "./ui/card"
@@ -23,10 +28,20 @@ import { Dialog, DialogContent } from "./ui/dialog"
 import SignInDialog from "./sign-in-dialog"
 import BookingSummary from "./booking-summary"
 import { useRouter } from "next/navigation"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select"
+import { getBarbers } from "../_actions/get-barbershop-employees"
 
 interface ServiceItemProps {
   service: BarbershopService
-  barbershop: Pick<Barbershop, "name">
+  barbershop: Pick<Barbershop, "name" | "id">
 }
 
 const TIME_LIST = [
@@ -101,22 +116,40 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
   const [selectedTime, setSelectedTime] = useState<string | undefined>(
     undefined,
   )
+  const [selectedBarber, setSelectedBarber] = useState<string | undefined>(
+    undefined,
+  )
+  const [barbers, setBarbers] = useState<
+    Prisma.BarbershopEmployeesGetPayload<{
+      include: { user: true; barbershop: true }
+    }>[]
+  >()
+
+  useEffect(() => {
+    const fetch = async () => {
+      const barbersList = await getBarbers({ barbershopId: barbershop.id })
+      setBarbers(barbersList)
+    }
+
+    fetch()
+  }, [barbershop.id])
 
   const [dayBookings, setDayBookings] = useState<Booking[]>([])
   const [bookingSheetIsOpen, setBookingSheetIsOpen] = useState(false)
 
   useEffect(() => {
     const fetch = async () => {
-      if (!selectedDay) return
+      if (!selectedDay || !selectedBarber) return
       const bookings = await getBookings({
         date: selectedDay,
         serviceId: service.id,
+        employeeId: selectedBarber,
       })
       setDayBookings(bookings)
     }
 
     fetch()
-  }, [selectedDay, service.id])
+  }, [selectedDay, service.id, selectedBarber])
 
   const selctedDate = useMemo(() => {
     if (!selectedDay || !selectedTime) return
@@ -139,6 +172,7 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
     setSelectedTime(undefined)
     setDayBookings([])
     setBookingSheetIsOpen(false)
+    setSelectedBarber(undefined)
   }
 
   const handleDateSelet = (date: Date | undefined) => {
@@ -149,14 +183,19 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
     setSelectedTime(time)
   }
 
+  const handleBarberSelect = (barber: string) => {
+    setSelectedBarber(barber)
+  }
+
   const handleCreateBooking = async () => {
     try {
-      if (!selctedDate) return
+      if (!selctedDate || !selectedBarber) return
 
       await createBooking({
         serviceId: service.id,
         userId: data?.user.id as string,
         date: selctedDate,
+        employeeId: selectedBarber,
       })
 
       handleBookingSheetOpenChange()
@@ -229,39 +268,69 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                     <SheetTitle>Fazer Reserva</SheetTitle>
                   </SheetHeader>
 
-                  <div className="border-b border-solid py-5">
-                    <Calendar
-                      mode="single"
-                      locale={ptBR}
-                      selected={selectedDay}
-                      onSelect={handleDateSelet}
-                      disabled={{ before: new Date() }}
-                      className="w-full"
-                      styles={{
-                        weekday: {
-                          width: "100%",
-                          textTransform: "capitalize",
-                        },
-                        day: {
-                          width: "100%",
-                        },
-                        day_button: {
-                          width: "100%",
-                        },
-                        button_previous: {
-                          width: "32px",
-                          height: "32px",
-                        },
-                        button_next: {
-                          width: "32px",
-                          height: "32px",
-                        },
-                        month_caption: {
-                          textTransform: "capitalize",
-                        },
-                      }}
-                    />
+                  <div className="boder-solid border-b px-3 py-5">
+                    <Select
+                      onValueChange={handleBarberSelect}
+                      value={selectedBarber}
+                    >
+                      <SelectTrigger>
+                        <SelectValue
+                          className="w-full max-w-48 px-3"
+                          placeholder="Selecione um barbeiro"
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Barbeiros</SelectLabel>
+                          {barbers?.map((barber) => (
+                            <SelectItem
+                              value={barber.id}
+                              key={barber.id}
+                              id={barber.id}
+                            >
+                              {barber.user.name}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
                   </div>
+
+                  {selectedBarber && (
+                    <div className="border-b border-solid py-5">
+                      <Calendar
+                        mode="single"
+                        locale={ptBR}
+                        selected={selectedDay}
+                        onSelect={handleDateSelet}
+                        disabled={{ before: new Date() }}
+                        className="w-full"
+                        styles={{
+                          weekday: {
+                            width: "100%",
+                            textTransform: "capitalize",
+                          },
+                          day: {
+                            width: "100%",
+                          },
+                          day_button: {
+                            width: "100%",
+                          },
+                          button_previous: {
+                            width: "32px",
+                            height: "32px",
+                          },
+                          button_next: {
+                            width: "32px",
+                            height: "32px",
+                          },
+                          month_caption: {
+                            textTransform: "capitalize",
+                          },
+                        }}
+                      />
+                    </div>
+                  )}
 
                   {selectedDay && (
                     <div className="flex gap-3 overflow-x-auto border-b border-solid p-5 px-5 [&::-webkit-scrollbar]:hidden">

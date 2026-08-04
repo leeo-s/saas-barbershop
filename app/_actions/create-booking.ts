@@ -9,6 +9,7 @@ interface CreateBookingParams {
   serviceId: string
   userId: string
   date: Date
+  employeeId: string
 }
 
 export const createBooking = async (params: CreateBookingParams) => {
@@ -21,6 +22,8 @@ export const createBooking = async (params: CreateBookingParams) => {
   if (user.user.id !== params.userId) {
     throw new Error("Usuário não autorizado")
   }
+
+  console.log(params)
 
   await prisma.booking.create({
     data: params,
